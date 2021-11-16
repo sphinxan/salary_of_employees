@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 
 namespace salary_of_employees
 {
     public class Employee
     {
-        public string Name { get; private set; }
-        public string departament { get; private set; }
-        public int Salary { get; private set; }
-        public bool Director { get; private set; }
+        public string Name { get; set; }
+        public string departament { get; set; }
+        public int Salary { get; set; }
+        public bool Director { get; set; }
 
         public Employee(string name, string depart, int salary, bool director = false)
         {
@@ -23,8 +25,8 @@ namespace salary_of_employees
         public static void ReadFile()
         {
             var file = new StreamReader("file.txt");
-            
-            while(!file.EndOfStream)
+
+            while (!file.EndOfStream)
             {
                 ReadString(file.ReadLine().Split(";"));
             }
@@ -38,6 +40,25 @@ namespace salary_of_employees
                 Departament.FindDepartament(array[1]).AddPerson(new Employee(array[0], array[1], Convert.ToInt32(array[2])));
 
         }
+
+        //public static string GetJSONs()
+        //{
+        //    var sb = new StringBuilder();
+
+        //    foreach (var dep in Departament.GetAllDepartments())
+        //    {
+        //        foreach (var men in dep.Employees)
+        //        {
+        //            sb.Append(JsonSerializer.Serialize(men) + "\n");
+        //        }
+        //        foreach (var men in dep.Directors)
+        //        {
+        //            sb.Append(JsonSerializer.Serialize(men) + "\n");
+        //        }
+        //    }
+
+        //    return sb.ToString();
+        //}
     }
 
     public class Departament
@@ -69,9 +90,9 @@ namespace salary_of_employees
         {
             var salary = 0;
             Departament departament = null;
-            foreach(var dep in Departaments.Values)
+            foreach (var dep in Departaments.Values)
             {
-                foreach(var men in dep.Directors)
+                foreach (var men in dep.Directors)
                 {
                     if (men.Salary >= salary)
                     {
@@ -102,21 +123,6 @@ namespace salary_of_employees
         //    }
         //    return salary / count;
         //}
-
-        //public void CheckMethods()
-        //{
-        //    if (CheckDirectors())
-        //    {
-        //        foreach (var e in Departaments)
-        //        {
-        //            Console.WriteLine($"departament: {e.Value}  average salary: {e.Value.CalculateSalary()}");
-        //        }
-
-        //        Console.WriteLine($"отдел с самым высокооплачиваемым руководителем: {HighestPaidDirector()}");
-        //    }
-        //    else
-        //        throw new Exception("error");
-        //}
     }
 
     class Program
@@ -136,6 +142,9 @@ namespace salary_of_employees
             }
             else
                 throw new Exception("error");
+
+
+            //Console.WriteLine(JsonSerializer.Serialize<Employee>(new Employee( "Иванов Иван Иванович", "Цех 1", 25000 )));
         }
     }
 }
